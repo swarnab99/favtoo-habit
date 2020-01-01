@@ -5,8 +5,10 @@
 	"main": "index.js",
 	"scripts": {
 		"dev": "next",
-		"build": "next build",
-		"start": "next start"
+		"build": "next build && next export",
+		"export": "next export",
+		"lambda-serve": "netlify-lambda serve functions",
+		"lambda-build": "netlify-lambda build functions"
 	},
 	"keywords": [],
 	"author": "",
