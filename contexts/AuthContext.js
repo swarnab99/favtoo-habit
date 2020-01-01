@@ -13,16 +13,18 @@ const AuthContextProvider = props => {
 				// User is signed in.
 				console.log('Already sign in');
 				// Redirect to home page
-
+				alert('log in');
 				setUser(userAuth);
 			} else {
 				console.log('user signed out');
 				setUser(null);
+				alert('log out');
 			}
 		});
 
 		return () => {
 			setUser(null);
+			alert('empty ');
 		};
 	}, []);
 
@@ -35,6 +37,7 @@ const AuthContextProvider = props => {
 				// The signed-in user info.
 				var user = result.user;
 				console.log(result, 'Result');
+				alert(user.displayName);
 				// ...
 			})
 			.catch(function(error) {
@@ -47,6 +50,7 @@ const AuthContextProvider = props => {
 				var credential = error.credential;
 				console.log('Error', error);
 				// ...
+				alert(error);
 			});
 	};
 
