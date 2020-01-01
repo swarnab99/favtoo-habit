@@ -27,6 +27,10 @@ provider.setCustomParameters({ prompt: 'select_account' });
 export const signInWithGoogle = () => auth.signInWithPopup(provider);
 // export const signInWithGoogle = () => auth.signInWithRedirect(provider); // this method is preferred in mobile devices than the above
 
+const providerFB = new firebase.auth.FacebookAuthProvider();
+providerFB.setCustomParameters({ display: 'popup' });
+export const signInWithFacebook = () => auth.signInWithPopup(providerFB);
+
 export default firebase;
 
 //firebase.auth().signInWithCredential(firebase.auth.GoogleAuthProvider.credential(googleIdToken, googleAccessToken))...`

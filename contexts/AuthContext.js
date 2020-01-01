@@ -1,5 +1,9 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { auth, signInWithGoogle } from '../firebase/firebase.utils';
+import {
+	auth,
+	signInWithGoogle,
+	signInWithFacebook
+} from '../firebase/firebase.utils';
 
 export const AuthContext = createContext();
 
@@ -30,7 +34,7 @@ const AuthContextProvider = props => {
 
 	// LOGIN FUNCTION USES GOOGLE AUTH 2.0
 	const login = async () => {
-		signInWithGoogle()
+		signInWithFacebook()
 			.then(function(result) {
 				// This gives you a Google Access Token. You can use it to access the Google API.
 				var token = result.credential.accessToken;
