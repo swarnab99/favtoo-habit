@@ -11,7 +11,7 @@ const Layout = ({ children }) => {
 	return (
 		<>
 			<Head>
-				<title>fav Habit</title>
+				<title>fav Habits</title>
 				<link
 					href='/static/css/layout.css'
 					rel='stylesheet'
@@ -30,9 +30,9 @@ const Layout = ({ children }) => {
 			<style jsx>{`
 				.container {
 					margin: 0 auto;
-					maxwidth: 960px;
+					max-width: 960px;
 					padding: 0px 1.0875rem 1.45rem;
-					paddingtop: 0;
+					padding-top: 0;
 				}
 			`}</style>
 		</>

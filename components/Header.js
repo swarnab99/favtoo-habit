@@ -1,21 +1,24 @@
 import React, { useContext } from 'react';
 // import { ThemeContext } from "../contexts/ThemeContext"
 import { AuthContext } from '../contexts/AuthContext';
+import HandleUserAuth from './HandleUserAuth/HandleUserAuth';
 
 const Header = ({ siteTitle }) => {
 	// const {} = useContext(ThemeContext)
-	const { user, login, logout } = useContext(AuthContext);
+	const { user, login, logout, googleSignIn } = useContext(AuthContext);
 	console.log(user);
 	return (
 		<header>
 			<div className='title-container'>
 				<h1 className='title'>fav habit</h1>
 			</div>
+
+			<HandleUserAuth />
 			<div>
 				{user ? (
 					<button onClick={logout}>Logout</button>
 				) : (
-					<button onClick={login}>Login</button>
+					<button onClick={googleSignIn}>Login</button>
 				)}
 			</div>
 

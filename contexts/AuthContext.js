@@ -1,9 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import {
-	auth,
-	signInWithGoogle,
-	signInWithFacebook
-} from '../firebase/firebase.utils';
+import { auth, signInWithGoogle } from '../firebase/firebase.utils';
 
 export const AuthContext = createContext();
 
@@ -17,31 +13,28 @@ const AuthContextProvider = props => {
 				// User is signed in.
 				console.log('Already sign in');
 				// Redirect to home page
-				alert('log in');
+
 				setUser(userAuth);
 			} else {
 				console.log('user signed out');
 				setUser(null);
-				alert('log out');
 			}
 		});
 
 		return () => {
 			setUser(null);
-			alert('empty ');
 		};
 	}, []);
 
-	// LOGIN FUNCTION USES GOOGLE AUTH 2.0
-	const login = async () => {
-		signInWithFacebook()
+	// SIGNUP USING GOOGLE
+	const googleSignIn = async () => {
+		signInWithGoogle()
 			.then(function(result) {
 				// This gives you a Google Access Token. You can use it to access the Google API.
 				var token = result.credential.accessToken;
 				// The signed-in user info.
 				var user = result.user;
 				console.log(result, 'Result');
-				alert(user.displayName);
 				// ...
 			})
 			.catch(function(error) {
@@ -54,12 +47,52 @@ const AuthContextProvider = props => {
 				var credential = error.credential;
 				console.log('Error', error);
 				// ...
-				alert(error);
 			});
 	};
 
+	// SIGNUP FUNCTION
+	const signup = async (fullName, email, password) => {
+		try {
+			// CREATING USER (SIGNIN)
+			const userData = await auth.createUserWithEmailAndPassword(
+				email,
+				password
+			);
+
+			// UPDATING USER PROFILE
+			const user = auth.currentUser;
+			await user.updateProfile({
+				displayName: fullName
+			});
+
+			// RETURN SUCCESS MESSAGE
+			return {
+				code: 'success'
+			};
+		} catch (error) {
+			return error;
+		}
+		return null;
+	};
+
+	// LOGIN FUNCTION
+	const login = async (email, password) => {
+		try {
+			// LOGIN USER
+			const userData = await auth.signInWithEmailAndPassword(email, password);
+
+			// RETURN SUCCESS MESSAGE
+			return {
+				code: 'success'
+			};
+		} catch (error) {
+			return error;
+		}
+		return null;
+	};
+
 	// LOGOUT FUNCTION
-	const logout = async id => {
+	const logout = async => {
 		auth
 			.signOut()
 			.then(function() {
@@ -73,7 +106,7 @@ const AuthContextProvider = props => {
 	};
 
 	return (
-		<AuthContext.Provider value={{ user, login, logout }}>
+		<AuthContext.Provider value={{ user, signup, login, logout, googleSignIn }}>
 			{props.children}
 		</AuthContext.Provider>
 	);
