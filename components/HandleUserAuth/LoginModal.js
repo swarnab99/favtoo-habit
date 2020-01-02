@@ -50,8 +50,8 @@ const LoginModal = ({ setShow }) => {
 			// END
 
 			// HIDE AUTH MODAL
-			var triggerAuth = document.querySelector('.trigger-auth');
-			triggerAuth.click();
+			// var triggerAuth = document.querySelector('.trigger-auth');
+			// triggerAuth.click();
 			// END
 		} else {
 			// LOADING COMPLETE
@@ -101,7 +101,6 @@ const LoginModal = ({ setShow }) => {
 					</form>
 				</div>
 			</div>
-			<style jsx>{``}</style>
 		</>
 	);
 };

@@ -40,6 +40,13 @@ const Header = ({ siteTitle }) => {
 					color: white;
 					text-decoration: none;
 				}
+				button {
+					background: none;
+    box-shadow: none;
+    border: none;
+    outline: none;
+}
+				}
 			`}</style>
 		</header>
 	);

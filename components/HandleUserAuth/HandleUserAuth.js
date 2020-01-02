@@ -1,14 +1,19 @@
 import React, { useContext } from 'react';
-// import { HabitContext } from "../../contexts/HabitContext"
+import { AuthContext } from '../../contexts/AuthContext';
 
 import AuthBtn from './AuthBtn';
 import AuthModal from './AuthModal';
 
 const HandleUserAuth = () => {
+	const { user } = useContext(AuthContext);
 	return (
 		<div>
-			<AuthModal />
-			<AuthBtn />
+			{!user && (
+				<div>
+					<AuthModal />
+					<AuthBtn />
+				</div>
+			)}
 		</div>
 	);
 };

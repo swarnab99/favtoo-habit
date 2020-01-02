@@ -53,9 +53,13 @@ const SignupModal = ({ setShow }) => {
 			setLoading(false);
 			// END
 			// HIDE AUTH MODAL
-			var triggerAuth = document.querySelector('.trigger-auth');
-			triggerAuth.click();
+			// var triggerAuth = document.querySelector('.trigger-auth');
+			// triggerAuth.click();
 			// END
+
+			// ========================= temporary
+			window.location = '/';
+			// =========================
 		} else {
 			setErrorMsg(feedback.message);
 
@@ -115,7 +119,6 @@ const SignupModal = ({ setShow }) => {
 					</form>
 				</div>
 			</div>
-			<style jsx>{``}</style>
 		</>
 	);
 };
