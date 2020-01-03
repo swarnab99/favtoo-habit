@@ -1,9 +1,17 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 // import { ThemeContext } from "../contexts/ThemeContext"
 import { AuthContext } from '../contexts/AuthContext';
 import HandleUserAuth from './HandleUserAuth/HandleUserAuth';
 
+import countapi from 'countapi-js';
+
 const Header = ({ siteTitle }) => {
+	useEffect(() => {
+		countapi.event('magic-button').then(result => {
+			alert(`The magic button has been pressed ${result.value} times.`);
+		});
+	}, []);
+
 	// const {} = useContext(ThemeContext)
 	const { user, login, logout, googleSignIn } = useContext(AuthContext);
 	console.log(user);
