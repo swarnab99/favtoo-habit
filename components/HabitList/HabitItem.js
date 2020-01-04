@@ -10,8 +10,14 @@ import { HabitContext } from '../../contexts/HabitContext';
 
 const HabitItem = ({ habit }) => {
 	// GLOBAL HABIT CONTEXT
-	const { updateHabit, deleteHabit } = useContext(HabitContext);
-	const { id, name, description } = habit;
+	const {
+		updateHabit,
+		deleteHabit,
+		habitComplete,
+		habitIncomplete
+	} = useContext(HabitContext);
+	const { id, name, description, todayStatus } = habit;
+	console.log(todayStatus);
 
 	const changeStatus = () => {
 		console.log('object');
@@ -34,14 +40,13 @@ const HabitItem = ({ habit }) => {
 		<div className='swipeableListWrap'>
 			<SwipeableList threshold={0.3}>
 				<SwipeableListItem
-					className='SwipeableListItem'
 					swipeLeft={{
 						content: (
 							<div className='content contentLeft'>
 								Habit Incompleted <FaTimes />
 							</div>
 						),
-						action: () => console.log('left swipe action triggered', name)
+						action: () => habitIncomplete(id)
 					}}
 					swipeRight={{
 						content: (
@@ -49,7 +54,7 @@ const HabitItem = ({ habit }) => {
 								<FaCheck /> Habit Completed
 							</div>
 						),
-						action: () => console.log('right swipe action triggered', id)
+						action: () => habitComplete(id)
 					}}>
 					<div className='habitItem'>{name}</div>
 				</SwipeableListItem>
@@ -61,9 +66,6 @@ const HabitItem = ({ habit }) => {
 					max-width: 99.99%;
 					overflow: hidden;
 				}
-				// .SwipeableListItem {
-				// 	opacity: 0;
-				// }
 
 				.habitItem {
 					color: var(--main-color);
@@ -73,9 +75,11 @@ const HabitItem = ({ habit }) => {
 					overflow: hidden;
 					margin-bottom: 0.8rem;
 					border-left: 6px solid #6d3c6d;
+					border-left-color: ${todayStatus !== undefined &&
+						(todayStatus ? 'green' : 'red')};
 					z-index: 9999;
 					opacity: 10;
-					transition: all 0.3s;
+					cursor: pointer;
 				}
 
 				.content {

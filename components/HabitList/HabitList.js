@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import uuid from 'uuid/v1';
+// import uuid from 'uuid/v1';
 
 import { HabitContext } from '../../contexts/HabitContext';
 import { AuthContext } from '../../contexts/AuthContext';
@@ -18,7 +18,7 @@ const HabitList = () => {
 						{habits.length ? (
 							<div>
 								{habits.map(habitItem => (
-									<HabitItem key={uuid()} habit={habitItem} />
+									<HabitItem key={habitItem.id} habit={habitItem} />
 								))}
 							</div>
 						) : (

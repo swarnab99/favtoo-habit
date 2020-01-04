@@ -22,14 +22,14 @@ const HabitContextProvider = props => {
 				.where('creator', '==', user.uid)
 				.get();
 
-			// habits.forEach(function (doc) {
-			//   // doc.data() is never undefined for query doc snapshots
-			//   console.log(doc.id, " => ", doc.data());
+			// ARRAY AND ALSO STORING ID FOR EACH OBJECT (HABIT)
+			const newHabits = habits.docs.map(doc => {
+				// check current date ======================================================
+				const habit = doc.data();
+				habit.id = doc.id;
+				return habit;
+			});
 
-			//   setHabits([habits])
-			// });
-
-			const newHabits = habits.docs.map(doc => doc.data());
 			setHabits(newHabits);
 		} catch (error) {
 			console.log(error);
@@ -70,8 +70,84 @@ const HabitContextProvider = props => {
 		setHabits(habits.filter(habit => habit.id !== id));
 	};
 
-	const deleteAllHabits = async id => {
-		console.log(id);
+	const habitComplete = async id => {
+		// CHECK FOR DUPLICATE ACTION
+		var needUpdate = false;
+		// UPDATE THE HABIT AND STORE IT IN NEW ARRAY
+		const newHabits = habits.map(habit => {
+			if (habit.id === id) {
+				if (!(habit.todayStatus === undefined || habit.todayStatus !== true)) {
+					return habit;
+				}
+				habit.todayStatus = true;
+				needUpdate = true;
+				return habit;
+			}
+			return habit;
+		});
+
+		console.log('needUpdate: ', needUpdate);
+
+		// RETURN IF DUPLICATE ACTION OCCURED
+		if (!needUpdate) {
+			return;
+		}
+
+		// ELSE UPDATE HABIT ON LOCAL STATE AND DATABASE
+
+		try {
+			// LOCAL STATE
+			setHabits(newHabits);
+			// FIRESTORE DATABASE
+			await firestore
+				.collection('habits')
+				.doc(id)
+				.update({
+					todayStatus: true
+				});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const habitIncomplete = async id => {
+		// CHECK FOR DUPLICATE ACTION
+		var needUpdate = false;
+		// UPDATE THE HABIT AND STORE IT IN NEW ARRAY
+		const newHabits = habits.map(habit => {
+			if (habit.id === id) {
+				if (!(habit.todayStatus === undefined || habit.todayStatus !== false)) {
+					return habit;
+				}
+				habit.todayStatus = false;
+				needUpdate = true;
+				return habit;
+			}
+			return habit;
+		});
+
+		console.log('needUpdate: ', needUpdate);
+
+		// RETURN IF DUPLICATE ACTION OCCURED
+		if (!needUpdate) {
+			return;
+		}
+
+		// ELSE UPDATE HABIT ON LOCAL STATE AND DATABASE
+
+		try {
+			// LOCAL STATE
+			setHabits(newHabits);
+			// FIRESTORE DATABASE
+			await firestore
+				.collection('habits')
+				.doc(id)
+				.update({
+					todayStatus: false
+				});
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	const removeHabitsFromState = () => {
@@ -86,8 +162,9 @@ const HabitContextProvider = props => {
 				addHabit,
 				updateHabit,
 				deleteHabit,
-				deleteAllHabits,
-				removeHabitsFromState
+				habitComplete,
+				habitIncomplete,
+				removeHabitsFromState // CHECK THIS ONE
 			}}>
 			{props.children}
 		</HabitContext.Provider>
