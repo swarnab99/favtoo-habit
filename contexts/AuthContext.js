@@ -1,5 +1,6 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import { auth, signInWithGoogle } from '../firebase/firebase.utils';
+import { HabitContext } from '../contexts/HabitContext';
 
 export const AuthContext = createContext();
 

@@ -13,6 +13,8 @@ const AuthModal = () => {
 			) : (
 				<LoginModal setShow={setShow} />
 			)}
+
+			<style jsx>{``}</style>
 		</div>
 	);
 };
