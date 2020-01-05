@@ -56,7 +56,9 @@ const HabitItem = ({ habit }) => {
 						),
 						action: () => habitComplete(id)
 					}}>
-					<div className='habitItem'>{name}</div>
+					<div onClick={() => deleteHabit(id)} className='habitItem'>
+						{name}
+					</div>
 				</SwipeableListItem>
 			</SwipeableList>
 
@@ -75,8 +77,8 @@ const HabitItem = ({ habit }) => {
 					overflow: hidden;
 					margin-bottom: 0.8rem;
 					border-left: 6px solid #6d3c6d;
-					border-left-color: ${todayStatus !== undefined &&
-						(todayStatus ? 'green' : 'red')};
+					border-left-color: ${todayStatus !== null &&
+						(todayStatus ? '#00BB9C' : '#ee005f')};
 					z-index: 9999;
 					opacity: 10;
 					cursor: pointer;
@@ -94,13 +96,13 @@ const HabitItem = ({ habit }) => {
 				}
 
 				.contentRight {
-					background: green;
+					background: #00bb9c;
 				}
 
 				.contentLeft {
 					text-align: right;
 					float: right;
-					background: red;
+					background: #ee005f;
 				}
 			`}</style>
 		</div>

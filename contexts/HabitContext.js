@@ -15,6 +15,44 @@ const HabitContextProvider = props => {
 		getUserHabits();
 	}, [user]);
 
+	// ==================== FOR FORMAT DATE FOR DATABSE (i.e todayDate) FUNCTION ====================
+	const getFormatedDate = obj => {
+		var today = obj;
+		var dd = today.getDate();
+
+		var mm = today.getMonth() + 1;
+		var yyyy = today.getFullYear();
+		if (dd < 10) {
+			dd = '0' + dd;
+		}
+
+		if (mm < 10) {
+			mm = '0' + mm;
+		}
+
+		today = yyyy + '' + mm + '' + dd;
+		// console.log(today);
+		return today;
+	};
+
+	// ==================== FOR HABIT SUB COLLECTION URL FUNCTION ====================
+	const getHabitSubRef = habitId => {
+		var today = new Date();
+		var mm = today.getMonth() + 1;
+		var yyyy = today.getFullYear();
+		if (mm < 10) {
+			mm = '0' + mm;
+		}
+		today = yyyy + '' + mm; // 202001 i.e 2020 / 01
+
+		return firestore
+			.collection('habits')
+			.doc(habitId)
+			.collection('activityLogs')
+			.doc(today);
+	};
+
+	// ==================== FOR GET-HABITS FUNCTION (AT INITIAL STAGE) ====================
 	const getUserHabits = async () => {
 		try {
 			const habits = await firestore
@@ -23,12 +61,26 @@ const HabitContextProvider = props => {
 				.get();
 
 			// ARRAY AND ALSO STORING ID FOR EACH OBJECT (HABIT)
-			const newHabits = habits.docs.map(doc => {
-				// check current date ======================================================
+			var newHabits = habits.docs.map(doc => {
 				const habit = doc.data();
+
+				// UPDATE TODAYDATE AND HABITSTATUS IF DATA IS OLD (YESTERDAY)
+				if (habit.todayDate !== getFormatedDate(new Date())) {
+					console.info('todayDate got updated');
+					habit.todayDate = getFormatedDate(new Date());
+					habit.todayStatus = null;
+				}
+				// END
+
 				habit.id = doc.id;
 				return habit;
 			});
+
+			// SORTING HABITS BASED ON CREATEDAT FIELD
+			newHabits = newHabits.sort(function(a, b) {
+				return a.createdAt.seconds - b.createdAt.seconds;
+			});
+			// END
 
 			setHabits(newHabits);
 		} catch (error) {
@@ -36,6 +88,7 @@ const HabitContextProvider = props => {
 		}
 	};
 
+	// ==================== FOR ADD HABIT FUNCTION ====================
 	const addHabit = async (name, description) => {
 		if (!user) {
 			alert('Please Login first');
@@ -45,16 +98,30 @@ const HabitContextProvider = props => {
 			name,
 			description,
 			createdAt: new Date(),
-			creator: user.uid
+			creator: user.uid,
+			todayStatus: null,
+			todayDate: getFormatedDate(new Date())
 		};
 
 		try {
 			const newCreatedDoc = await firestore.collection('habits').add(newHabit);
-			console.log(newCreatedDoc.id, newCreatedDoc);
+			const habitId = newCreatedDoc.id;
 
-			newHabit.id = newCreatedDoc.id;
+			newHabit.id = habitId;
 
-			console.log(newHabit);
+			console.info('Habit at Local State: ', newHabit);
+
+			// // UPDATE HABIT SUBCOLLECTION DATA
+
+			// const habitSubRef = getHabitSubRef(habitId); // it is a utility function see begining
+
+			// await habitSubRef.set(
+			// 	{
+			// 		[newHabit.todayDate]: newHabit.todayStatus
+			// 	},
+			// 	{ merge: true }
+			// );
+			// // END
 
 			setHabits([...habits, newHabit]);
 		} catch (error) {
@@ -64,23 +131,64 @@ const HabitContextProvider = props => {
 		return true;
 	};
 
+	// ==================== FOR UPDATE HABIT FUNCTION ====================
 	const updateHabit = async id => {};
 
+	// ==================== FOR DELETE HABIT FUNCTION ====================
 	const deleteHabit = async id => {
-		setHabits(habits.filter(habit => habit.id !== id));
+		// setHabits(habits.filter(habit => habit.id !== id));
+		try {
+			const feedback = confirm('Do you realy want to delete this habit?');
+			console.log(feedback);
+			if (!feedback) {
+				return;
+			}
+			await firestore
+				.collection('habits')
+				.doc(id)
+				.delete();
+
+			// UPDATE HABIT SUBCOLLECTION DATA
+			const habitSubRef = getHabitSubRef(id); // it is a utility function see begining
+
+			await habitSubRef.set(
+				{
+					deleteInfo: {
+						creator: user.displayName,
+						creatorId: user.uid,
+						creatorEmail: user.email,
+						deletedAt: new Date()
+					}
+				},
+				{ merge: true }
+			);
+			// END
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
+	// ==================== FOR HABIT COMPLETE FUNCTION ====================
 	const habitComplete = async id => {
 		// CHECK FOR DUPLICATE ACTION
 		var needUpdate = false;
+		var tempHabitId = null;
+		var tempTodayStatus = null;
+		var tempTodayDate = null;
+
 		// UPDATE THE HABIT AND STORE IT IN NEW ARRAY
 		const newHabits = habits.map(habit => {
 			if (habit.id === id) {
-				if (!(habit.todayStatus === undefined || habit.todayStatus !== true)) {
+				if (!(habit.todayStatus === null || habit.todayStatus !== true)) {
 					return habit;
 				}
 				habit.todayStatus = true;
+				habit.todayDate = getFormatedDate(new Date());
 				needUpdate = true;
+				tempHabitId = habit.id;
+				tempTodayStatus = true;
+				tempTodayDate = getFormatedDate(new Date());
+
 				return habit;
 			}
 			return habit;
@@ -88,7 +196,7 @@ const HabitContextProvider = props => {
 
 		console.log('needUpdate: ', needUpdate);
 
-		// RETURN IF DUPLICATE ACTION OCCURED
+		// RETURN IF DUPLICATE ACTION OCCURRED
 		if (!needUpdate) {
 			return;
 		}
@@ -96,31 +204,54 @@ const HabitContextProvider = props => {
 		// ELSE UPDATE HABIT ON LOCAL STATE AND DATABASE
 
 		try {
-			// LOCAL STATE
-			setHabits(newHabits);
 			// FIRESTORE DATABASE
 			await firestore
 				.collection('habits')
 				.doc(id)
 				.update({
-					todayStatus: true
+					todayStatus: tempTodayStatus,
+					todayDate: tempTodayDate
 				});
+
+			// UPDATE HABIT SUBCOLLECTION DATA
+			const habitSubRef = getHabitSubRef(tempHabitId); // it is a utility function see begining
+
+			await habitSubRef.set(
+				{
+					[tempTodayDate]: tempTodayStatus,
+					lastUpdate: new Date()
+				},
+				{ merge: true }
+			);
+			// END
+
+			// LOCAL STATE
+			setHabits(newHabits);
 		} catch (error) {
 			console.log(error);
 		}
 	};
 
+	// ==================== FOR HABIT INCOMPLETE FUNCTION ====================
 	const habitIncomplete = async id => {
 		// CHECK FOR DUPLICATE ACTION
 		var needUpdate = false;
+		var tempTodayStatus = null;
+		var tempTodayDate = null;
+		var tempHabitId = null;
+
 		// UPDATE THE HABIT AND STORE IT IN NEW ARRAY
 		const newHabits = habits.map(habit => {
 			if (habit.id === id) {
-				if (!(habit.todayStatus === undefined || habit.todayStatus !== false)) {
+				if (!(habit.todayStatus === null || habit.todayStatus !== false)) {
 					return habit;
 				}
 				habit.todayStatus = false;
+				habit.todayDate = getFormatedDate(new Date());
 				needUpdate = true;
+				tempHabitId = habit.id;
+				tempTodayStatus = false;
+				tempTodayDate = getFormatedDate(new Date());
 				return habit;
 			}
 			return habit;
@@ -128,7 +259,7 @@ const HabitContextProvider = props => {
 
 		console.log('needUpdate: ', needUpdate);
 
-		// RETURN IF DUPLICATE ACTION OCCURED
+		// RETURN IF DUPLICATE ACTION OCCURRED
 		if (!needUpdate) {
 			return;
 		}
@@ -136,20 +267,35 @@ const HabitContextProvider = props => {
 		// ELSE UPDATE HABIT ON LOCAL STATE AND DATABASE
 
 		try {
-			// LOCAL STATE
-			setHabits(newHabits);
 			// FIRESTORE DATABASE
 			await firestore
 				.collection('habits')
 				.doc(id)
 				.update({
-					todayStatus: false
+					todayStatus: tempTodayStatus,
+					todayDate: tempTodayDate
 				});
+
+			// UPDATE HABIT SUBCOLLECTION DATA
+			const habitSubRef = getHabitSubRef(tempHabitId); // it is a utility function see begining
+
+			await habitSubRef.set(
+				{
+					[tempTodayDate]: tempTodayStatus,
+					lastUpdate: new Date()
+				},
+				{ merge: true }
+			);
+			// END
+
+			// LOCAL STATE
+			setHabits(newHabits);
 		} catch (error) {
 			console.log(error);
 		}
 	};
 
+	// ==================== SET HABIT STATE TO NULL FUNCTION ====================
 	const removeHabitsFromState = () => {
 		setHabits([]);
 		alert('removed');
