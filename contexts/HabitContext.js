@@ -168,6 +168,9 @@ const HabitContextProvider = props => {
 		}
 	};
 
+	// ==================== FOR HABIT COMPLETE AND INCOMPLETE FUNCTION ====================
+	const habitAction = async id => {};
+
 	// ==================== FOR HABIT COMPLETE FUNCTION ====================
 	const habitComplete = async id => {
 		// CHECK FOR DUPLICATE ACTION

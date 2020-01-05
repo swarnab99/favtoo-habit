@@ -2,6 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 
 import Header from './Header';
+import Loader from './COMMON/Loader';
 // import '../assets/layout.css';
 import HabitContextProvider from '../contexts/HabitContext';
 import AuthContextProvider from '../contexts/AuthContext';
@@ -20,6 +21,7 @@ const Layout = ({ children }) => {
 			</Head>
 			<AuthContextProvider>
 				<HabitContextProvider>
+					<Loader />
 					<Header />
 					<div className='container'>
 						<main>{children}</main>

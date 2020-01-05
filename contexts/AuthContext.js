@@ -18,7 +18,7 @@ const AuthContextProvider = props => {
 				setUser(userAuth);
 			} else {
 				console.log('user signed out');
-				setUser(null);
+				setUser(false); // used in loader to compare false and null to show form
 			}
 		});
 
