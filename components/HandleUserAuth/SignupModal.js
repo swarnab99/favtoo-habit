@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { FaCheck, FaCog } from 'react-icons/fa';
+import { FaAngleDoubleRight, FaCog } from 'react-icons/fa';
 
 import { AuthContext } from '../../contexts/AuthContext';
 
@@ -73,12 +73,7 @@ const SignupModal = ({ setShow }) => {
 			<div className='modal-content'>
 				{/* <span className="close-button">&times;</span> */}
 				<div>
-					<h1 className='title'>
-						Signup to Habit{' '}
-						<span onClick={() => setShow('login')} className='link'>
-							Login
-						</span>
-					</h1>
+					<h1 className='title'>Signup to Habit </h1>
 				</div>
 				<div className='input-group'>
 					<form onSubmit={handleSubmit}>
@@ -112,11 +107,14 @@ const SignupModal = ({ setShow }) => {
 								</span>
 							) : (
 								<span className='icon'>
-									<FaCheck />
+									<FaAngleDoubleRight />
 								</span>
 							)}
 						</button>
 					</form>
+					<div onClick={() => setShow('login')} className='link'>
+						Already have Account? <span>Login</span>
+					</div>
 				</div>
 			</div>
 		</>

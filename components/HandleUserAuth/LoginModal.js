@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { FaCheck, FaCog } from 'react-icons/fa';
+import { FaAngleDoubleRight, FaCog } from 'react-icons/fa';
 
 import { AuthContext } from '../../contexts/AuthContext';
 
@@ -64,12 +64,7 @@ const LoginModal = ({ setShow }) => {
 		<>
 			<div className='modal-content'>
 				{/* <span className="close-button">&times;</span> */}
-				<h1 className='title'>
-					Login to Habit{' '}
-					<span onClick={() => setShow('signup')} className='link'>
-						Create Account
-					</span>
-				</h1>
+				<h1 className='title'>Login to Habit </h1>
 				<div className='input-group'>
 					<form onSubmit={handleSubmit}>
 						<input
@@ -78,6 +73,8 @@ const LoginModal = ({ setShow }) => {
 							name='email'
 							type='email'
 							placeholder='Email'
+							required
+							autoComplete='off'
 						/>
 						<input
 							value={formData.password}
@@ -85,6 +82,8 @@ const LoginModal = ({ setShow }) => {
 							name='password'
 							type='password'
 							placeholder='Password'
+							required
+							autoComplete='off'
 						/>
 						<p className='error-msg'>{errorMsg && errorMsg}</p>
 						<button type='submit' disabled={loading}>
@@ -94,11 +93,14 @@ const LoginModal = ({ setShow }) => {
 								</span>
 							) : (
 								<span className='icon'>
-									<FaCheck />
+									<FaAngleDoubleRight />
 								</span>
 							)}
 						</button>
 					</form>
+					<div onClick={() => setShow('signup')} className='link'>
+						Don't have Account? <span> Create Account</span>
+					</div>
 				</div>
 			</div>
 		</>

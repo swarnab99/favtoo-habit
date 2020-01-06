@@ -1,13 +1,20 @@
 import React, { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
+import HandleUserAuth from '../HandleUserAuth/HandleUserAuth';
 
 const Loader = () => {
 	const { user } = useContext(AuthContext);
+	// const user = null;
 	console.log(user);
 	return (
 		<div className='loader-wraper'>
 			<div className='logo'>Habit</div>
-			<div className='loader'>Loading...</div>
+
+			{user === false ? (
+				<HandleUserAuth />
+			) : (
+				<div className='loader'>Loading...</div>
+			)}
 
 			<style jsx>{`
 				.loader-wraper {
@@ -24,12 +31,14 @@ const Loader = () => {
 				}
 				.logo {
 					text-align: center;
-					font-family: 'Poppins', sans-serif;
-					font-size: 4rem;
-					position: absolute;
-					bottom: 30vh;
+    font-family: 'Poppins',sans-serif;
+    font-size: 4rem;
+					 transform: ${user === false ? 'translateY(0)' : 'translateY(30vh)'};
+    bottom: 0;
+    width: 100%;
+    margin-top: 4rem;
 					width: 100%;
-					margin: 80px auto;
+					margin-top: 4rem;
 				}
 				.loader,
 				.loader:before,
@@ -48,7 +57,7 @@ const Loader = () => {
 					margin: 80px auto;
 					position: absolute;
 					left: 50%;
-					bottom: 10vh;
+					bottom: 5vh;
 					transform: translate(-50%, -50%);
 					text-indent: -9999em;
 					// -webkit-transform: translateZ(0);

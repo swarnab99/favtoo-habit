@@ -12,23 +12,19 @@ const HabitList = () => {
 	console.log(habits);
 	return (
 		<>
-			{user ? (
-				<div>
-					<div className='container'>
-						{habits.length ? (
-							<div>
-								{habits.map(habitItem => (
-									<HabitItem key={habitItem.id} habit={habitItem} />
-								))}
-							</div>
-						) : (
-							<div>No Habits to cover </div>
-						)}
-					</div>
+			<div>
+				<div className='container'>
+					{habits.length ? (
+						<div>
+							{habits.map(habitItem => (
+								<HabitItem key={habitItem.id} habit={habitItem} />
+							))}
+						</div>
+					) : (
+						<div>No Habits to cover </div>
+					)}
 				</div>
-			) : (
-				<div>Please Sign In to Create Habits</div>
-			)}
+			</div>
 
 			<style jsx>{`
 				font-family: 'Poppins', sans-serif;

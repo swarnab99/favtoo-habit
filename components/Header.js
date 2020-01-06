@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 // import { ThemeContext } from "../contexts/ThemeContext"
 import { AuthContext } from '../contexts/AuthContext';
-import HandleUserAuth from './HandleUserAuth/HandleUserAuth';
+// import HandleUserAuth from './HandleUserAuth/HandleUserAuth';
 
 const Header = ({ siteTitle }) => {
 	// const {} = useContext(ThemeContext)
@@ -13,7 +13,6 @@ const Header = ({ siteTitle }) => {
 				<h1 className='title'>fav habit</h1>
 			</div>
 
-			<HandleUserAuth />
 			<div>
 				{user ? (
 					<button onClick={logout}>Logout</button>
