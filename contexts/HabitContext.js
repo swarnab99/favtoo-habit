@@ -64,8 +64,9 @@ const HabitContextProvider = props => {
 
 			console.log(habitsData);
 			if (habitsData.empty) {
-				// setHabitActionLoading(false);
+				setHabitActionLoading(false);
 				console.log('No habits found');
+				setHabits([]);
 				return;
 			}
 
@@ -110,8 +111,8 @@ const HabitContextProvider = props => {
 		setHabitActionLoading(true);
 
 		let newHabit = {
-			name,
-			description,
+			name: name.trim(),
+			description: description.trim(),
 			createdAt: new Date(),
 			creator: user.uid,
 			todayStatus: null,

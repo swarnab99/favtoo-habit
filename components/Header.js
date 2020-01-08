@@ -8,7 +8,7 @@ import ProgressBar from './COMMON/ProgressBar';
 const Header = ({ siteTitle }) => {
 	// const {} = useContext(ThemeContext)
 	const { user, logout, googleSignIn } = useContext(AuthContext);
-	console.log(user);
+	// console.log(user);
 	return (
 		<>
 			<header>

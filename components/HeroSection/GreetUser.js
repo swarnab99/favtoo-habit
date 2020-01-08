@@ -1,6 +1,6 @@
 import React from 'react';
 const GreetUser = ({ user }) => {
-	console.log('object', user);
+	// console.log('object', user);
 	return (
 		<div>
 			<h1 className='greet'>Hi, {user ? user.displayName : 'Beauty'}</h1>

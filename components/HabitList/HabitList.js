@@ -7,7 +7,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 import HabitItem from './HabitItem';
 
 const HabitList = () => {
-	const { habits } = useContext(HabitContext);
+	const { habits, habitActionLoading } = useContext(HabitContext);
 	const { user } = useContext(AuthContext);
 	// console.log(habits);
 	return (
@@ -21,7 +21,7 @@ const HabitList = () => {
 							))}
 						</div>
 					) : (
-						<div>No Habits to cover </div>
+						<div>{habitActionLoading === false && 'No Habits to cover'}</div>
 					)}
 				</div>
 			</div>

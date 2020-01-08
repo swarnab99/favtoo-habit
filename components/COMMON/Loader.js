@@ -5,7 +5,7 @@ import HandleUserAuth from '../HandleUserAuth/HandleUserAuth';
 const Loader = () => {
 	const { user } = useContext(AuthContext);
 	// const user = null;
-	console.log(user);
+	// console.log(user);
 	return (
 		<div className='loader-wraper'>
 			<div className='logo'>Habit</div>
