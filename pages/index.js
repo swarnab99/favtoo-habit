@@ -3,11 +3,11 @@ import React from 'react';
 import Layout from '../components/Layout';
 import CreateHabit from '../components/CreateHabit/CreateHabit';
 import HabitList from '../components/HabitList/HabitList';
-import GreetUser from '../components/HeroSection/GreetUser';
+import HeroSection from '../components/HeroSection/HeroSection';
 
 const IndexPage = () => (
 	<Layout>
-		<GreetUser />
+		<HeroSection />
 		<HabitList />
 		<CreateHabit />
 	</Layout>

@@ -10,18 +10,9 @@ import { HabitContext } from '../../contexts/HabitContext';
 
 const HabitItem = ({ habit }) => {
 	// GLOBAL HABIT CONTEXT
-	const {
-		updateHabit,
-		deleteHabit,
-		habitComplete,
-		habitIncomplete
-	} = useContext(HabitContext);
+	const { updateHabit, deleteHabit, habitAction } = useContext(HabitContext);
 	const { id, name, description, todayStatus } = habit;
-	console.log(todayStatus);
-
-	const changeStatus = () => {
-		console.log('object');
-	};
+	// console.log(todayStatus);
 
 	return (
 		// <div onClick={changeStatus}>
@@ -46,7 +37,7 @@ const HabitItem = ({ habit }) => {
 								Habit Incompleted <FaTimes />
 							</div>
 						),
-						action: () => habitIncomplete(id)
+						action: () => habitAction(id, false)
 					}}
 					swipeRight={{
 						content: (
@@ -54,7 +45,7 @@ const HabitItem = ({ habit }) => {
 								<FaCheck /> Habit Completed
 							</div>
 						),
-						action: () => habitComplete(id)
+						action: () => habitAction(id, true)
 					}}>
 					<div onClick={() => deleteHabit(id)} className='habitItem'>
 						{name}

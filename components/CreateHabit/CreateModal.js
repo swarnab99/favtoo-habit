@@ -115,6 +115,7 @@ const CreateModal = () => {
 
 				.title {
 					font-size: 1.3rem;
+					color: #4c2a4c;
 				}
 
 				.input-group {

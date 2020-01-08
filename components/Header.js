@@ -3,29 +3,31 @@ import React, { useContext } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 // import HandleUserAuth from './HandleUserAuth/HandleUserAuth';
 
+import ProgressBar from './COMMON/ProgressBar';
+
 const Header = ({ siteTitle }) => {
 	// const {} = useContext(ThemeContext)
 	const { user, logout, googleSignIn } = useContext(AuthContext);
 	console.log(user);
 	return (
-		<header>
-			<div className='title-container'>
-				<h1 className='title'>fav habit</h1>
-			</div>
+		<>
+			<header>
+				<div className='title-container'>
+					<h1 className='title'>fav habit</h1>
+				</div>
 
-			<div>
-				{user ? (
-					<button onClick={logout}>Logout</button>
-				) : (
-					<button onClick={googleSignIn}>Login</button>
-				)}
-			</div>
+				<div>
+					{user ? (
+						<button onClick={logout}>Logout</button>
+					) : (
+						<button onClick={googleSignIn}>Login</button>
+					)}
+				</div>
 
-			<style jsx>{`
+				<style jsx>{`
 				header {
 					font-family: 'Poppins', sans-serif;
 					background: #6d3d6d;
-					margin-bottom: 1.45rem;
 				}
 				header .title-container {
 					margin: 0 auto;
@@ -47,7 +49,10 @@ const Header = ({ siteTitle }) => {
 }
 				}
 			`}</style>
-		</header>
+			</header>
+
+			<ProgressBar />
+		</>
 	);
 };
 

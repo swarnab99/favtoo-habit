@@ -9,7 +9,7 @@ import HabitItem from './HabitItem';
 const HabitList = () => {
 	const { habits } = useContext(HabitContext);
 	const { user } = useContext(AuthContext);
-	console.log(habits);
+	// console.log(habits);
 	return (
 		<>
 			<div>

@@ -30,15 +30,14 @@ const Loader = () => {
           
 				}
 				.logo {
-					text-align: center;
+				    text-align: center;
     font-family: 'Poppins',sans-serif;
     font-size: 4rem;
-					 transform: ${user === false ? 'translateY(0)' : 'translateY(30vh)'};
+    transform: translateY(0);
     bottom: 0;
     width: 100%;
-    margin-top: 4rem;
-					width: 100%;
-					margin-top: 4rem;
+    margin-top: 1rem;
+}
 				}
 				.loader,
 				.loader:before,
